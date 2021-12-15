@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: django-deployment
+  labels:
+    app: django-application
+spec:
+  selector:
+    matchLabels:
+      project: django
+  template:
+    metadata:
+      labels:
+        project: django
+    spec:
+      containers:
+      - name: django-pod
+        image: django_app
+        ports:
+        - containerPort: 80
+        imagePullPolicy: IfNotPresent
+        envFrom:
+          - configMapRef:
+              name: django-app-config
+
+---
+apiVersion : v1
+kind: Service
+metadata:
+  name: django-service-clusterip
+  labels:
+    env: prod
+    project: django
+spec:
+  selector:
+    project: django
+  ports:
+    - port: 80
+      targetPort: 80

@@ -1,0 +1,19 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: django-clearsessions-once
+spec:
+  schedule: "0 0 1 * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: django-clearsessions
+            image: django_app
+            command: [ "./manage.py", "clearsessions" ]
+            envFrom:
+              - configMapRef:
+                  name: django-app-config
+            imagePullPolicy: IfNotPresent
+          restartPolicy: OnFailure

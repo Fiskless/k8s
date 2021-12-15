@@ -1,0 +1,8 @@
+services:
+  db:
+    ports: 
+      - 192.168.1.35:5432:5432
+  web:
+    environment: 
+      DATABASE_URL: ${WEB_DATABASE_URL-postgres://test_k8s:OwOtBep9Frut@192.168.1.35:5432/test_k8s}
+
